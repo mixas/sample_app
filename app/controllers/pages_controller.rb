@@ -11,4 +11,12 @@ class PagesController < ApplicationController
     @title = "about"
   end
 
+  def about
+    $title = 'test'
+  end
+
+  def about
+    $title = 'help'
+  end
+
 end
