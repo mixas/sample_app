@@ -12,7 +12,7 @@ describe UserController do
    
     it "title should be sign up" do
       get 'new'
-      response.should have_selector("title", :content => "sign up")
+      response.should have_selector("title", :content => "new")
     end
 
   end

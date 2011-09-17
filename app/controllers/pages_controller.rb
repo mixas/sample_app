@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   
   def help
-    $title = "help"
+    @title = "help"
   end
 
   def home
