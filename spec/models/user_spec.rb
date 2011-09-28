@@ -78,7 +78,7 @@ describe User do
 
     it "should require a matching password confirmation" do
       User.new(@attr.merge(:password_confirmation => "invalid")).
-        should_not be_valid
+      should_not be_valid
     end
 
     it "should reject short passwords" do
@@ -103,6 +103,39 @@ describe User do
     it "should have an encrypted password attribute" do
       @user.should respond_to(:encrypted_password)
     end
+
+    it "should set the encrypted password" do
+      @user.encrypted_password.should_not be_blank
+    end
+
+    describe "has_password?" do
+      
+      it "should be true if the passwords match" do
+        @user.has_password?(@attr[:password]).should be_true
+      end
+
+      it "should be false if the passwords don't match" do
+        @user.has_password?("invalid").should be_false
+      end
+    end
+
+    describe "Password walidations" do
+ 
+      it "should be nil if email/password mismatch" do
+        wrong_pass_user = User.authenticate(@attr[:pass], "wrong_pass")
+        wrong_pass_user.should be_nil
+      end
+
+      it "should be nil if email is wrong" do
+        wrong_email_user = User.authenticate("wrong@mail.ru", @attr[:password])
+      end
+
+      it "should return user if email/pass match" do
+        matching_user = User.authenticate(@attr[:email], @attr[:password])
+        matching_user.should == @user
+      end
+    end
+
   end
     
 end

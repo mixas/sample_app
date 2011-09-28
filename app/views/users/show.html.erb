@@ -1,2 +1,13 @@
-name: <%= @user.name %> <br> 
-email: <%= @user.email %>
+<table class="profile" summary="profile information">
+  <tr><td class="main">
+	<h1>
+	  <%= gravatar_for @user %>
+	  <%= @user.name %>
+	</h1>
+      </td>
+      <td class="sidebar round"> 
+	<strong>name:</strong> <%= @user.name %> <br> 
+	<strong>url:</strong> <%= link_to user_path @user %>
+      </td> 
+  <tr>
+</table>

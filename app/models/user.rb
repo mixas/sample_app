@@ -7,7 +7,7 @@
 #  email      :string(255)
 #  created_at :datetime
 #  updated_at :datetime
-#
+#  encrypted_password :string
 
 class User < ActiveRecord::Base
   attr_accessor :password
@@ -24,4 +24,37 @@ class User < ActiveRecord::Base
   validates :password, :confirmation =>true,
                        :length => { :within => 6..40 },
                        :presence => true
+
+ 
+before_save :encrypt_password
+
+   def has_password?(submitted_pass)
+     encrypted_password == encrypt(submitted_pass)
+   end
+
+   def self.authenticate(email,pass)
+     user = find_by_email(email)
+     return nil if user.nil?
+     return user if user.has_password?(pass)   
+   end
+
+   private
+
+    def encrypt_password
+      self.salt = make_salt if new_record?
+      self.encrypted_password = encrypt(password)
+    end
+
+    def encrypt(string)
+      secure_hash("#{salt}--#{string}")
+    end
+
+    def make_salt
+      secure_hash("#{Time.now.utc}--#{password}")
+    end
+
+    def secure_hash(string)
+      Digest::SHA2.hexdigest(string)
+    end
+
 end
